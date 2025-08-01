@@ -1,0 +1,2 @@
+export const FETCH_ALL_APP = "FETCH_ALL_APP"
+export const APPLICATION_LIST = "APPLICATION_LIST"
