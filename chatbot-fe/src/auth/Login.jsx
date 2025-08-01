@@ -6,6 +6,7 @@ import { handleError, handleSuccess } from "../utils/toastUtils"
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook } from "react-icons/fa6"
 import { useNavigate } from "react-router-dom"
+import { BASE_URL } from "../config/Api.jsx"
 import axios from "axios"
 
 const Login = ({ setAuth }) => {
@@ -37,10 +38,7 @@ const Login = ({ setAuth }) => {
     }
 
     try {
-      const response = await axios.post(
-        "http://65.1.102.134:13738/api/login",
-        loginData
-      )
+      const response = await axios.post(BASE_URL + "/login", loginData)
       const { message, token } = response.data
 
       if (token) {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useParams, Link, useSearchParams } from "react-router-dom"
 import { handleSuccess, handleError } from "../../utils/toastUtils"
 import axios from "axios"
+import { BASE_URL } from "../../config/Api.jsx"
 import { IoArrowBack } from "react-icons/io5"
 
 // ✅ No hover styles now
@@ -20,7 +21,7 @@ const DailyReportDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`http://65.1.102.134:13738/api/report/weekly/${date}`)
+      .get(BASE_URL + `/report/weekly/${date}`)
       .then((res) => {
         if (res.data.success) {
           const all = res.data.data
@@ -38,14 +39,11 @@ const DailyReportDetail = () => {
 
   const handleResend = async (msg) => {
     try {
-      const res = await axios.post(
-        "http://65.1.102.134:13738/api/messages/send/number",
-        {
-          contactNo: msg.mobileNumber,
-          message: msg.message,
-          originalMessageId: msg._id,
-        }
-      )
+      const res = await axios.post(BASE_URL + "/messages/send/number", {
+        contactNo: msg.mobileNumber,
+        message: msg.message,
+        originalMessageId: msg._id,
+      })
 
       if (res.data.message) {
         handleSuccess("Resent successfully")

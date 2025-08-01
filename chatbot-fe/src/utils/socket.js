@@ -1,4 +1,6 @@
 // src/utils/socket.js
 import { io } from "socket.io-client"
-const socket = io("http://65.1.102.134:13738", { autoConnect: false })
+const socket = io("https://whatsapp.swaminarayanbhagwan.org/", {
+  autoConnect: false,
+})
 export default socket

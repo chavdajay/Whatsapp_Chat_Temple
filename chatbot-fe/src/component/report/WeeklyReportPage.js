@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
+import { BASE_URL } from "../../config/Api.jsx"
 import { useNavigate } from "react-router-dom"
 
 const WeeklyReportPage = () => {
@@ -10,7 +11,7 @@ const WeeklyReportPage = () => {
 
   const fetchReport = async () => {
     try {
-      const res = await axios.get("http://65.1.102.134:13738/api/report/weekly", {
+      const res = await axios.get(BASE_URL + "/report/weekly", {
         params: {
           startDate,
           endDate,
