@@ -32,7 +32,7 @@ export const pavtiData = {
     "Donor Name": "Ghanshyambhai Pravinchandra Dave",
     "Present City": "Vadodara",
     ISD: "+91",
-    "Mobile Number": "8460070594",
+    "Mobile Number": "7201849168",
     "Rcpt Mode": "Cash Receipt",
     "Ledger Name": "General Donation",
     SubHead: "Rasoi",

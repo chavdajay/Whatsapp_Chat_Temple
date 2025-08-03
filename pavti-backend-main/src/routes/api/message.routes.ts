@@ -10,6 +10,7 @@ import {
 import { saveMessage, getMessagesByUserId } from "../../modules/message";
 import { Message } from "../../modules/message/types/message";
 import { MessageModel } from "../../modules/message";
+import { stringToBoolean } from "../../helper/booleanUtils";
 
 const router = Router();
 const whatsappService = WhatsAppService.getInstance();
@@ -94,7 +95,11 @@ router.get("/msg", async (req, res) => {
 // ✅ POST version (dynamic input)
 router.post("/msg", async (req, res) => {
   try {
-    const messages = req.body?.messages;
+    let messages = req.body?.messages?.messages || [];
+    if (messages && !Array.isArray(messages)) {
+      messages = [messages];
+    }
+    
     if (!Array.isArray(messages)) {
       return res.status(400).json({ error: "Invalid message data" });
     }
@@ -112,7 +117,8 @@ async function sendMessages(messages: any[]) {
   for (const contact of messages) {
     const contactNo = contact["ISD"].replace("+", "") + contact["Mobile No"];
     const chatId = `${contactNo}@c.us`;
-
+    const sendRasoi = stringToBoolean(contact.SendRasoi);
+    const sendPayout = stringToBoolean(contact.SendPayout);
     let user = await getUserByNumber(contactNo);
     if (!user) {
       user = await saveUser(
@@ -134,7 +140,7 @@ async function sendMessages(messages: any[]) {
     }[] = [];
 
     // ✅ Rasoi Template
-    if (contact.SendRasoi) {
+    if (sendRasoi) {
       const name = contact.Name;
       const place = contact.RasoiPlace;
 
@@ -163,12 +169,12 @@ async function sendMessages(messages: any[]) {
     }
 
     // ✅ Payout Template
-    if (contact.SendPayout) {
+    if (sendPayout) {
       const name = contact.Name;
-      const payoutId = contact.PayoutId;
-      const date = contact.PayoutDate;
+      const payoutId = contact.PayoutId || "-";
+      const date = contact.PayoutDate || "-";
       const amount = contact.PayoutAmount;
-      const utr = contact.UTR;
+      const utr = contact.UTR || "-";
       const org = contact.RasoiPlace;
 
       const template = {
@@ -224,7 +230,9 @@ async function sendMessages(messages: any[]) {
           isDelivered: false,
           isSeen: false,
           hasAttachment: false,
-          isRasoi: !!contact.SendRasoi,
+          isRasoi: true,
+          isPayoutMsg: sendPayout,
+          isRasoiMsg: sendRasoi,
           isError,
           sendedAt: new Date(),
           createdAt: new Date(),

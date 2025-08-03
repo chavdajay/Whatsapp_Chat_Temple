@@ -23,6 +23,8 @@ export interface IMessage {
   hasAttachment: boolean;
   isPavti?: boolean;
   isRasoi?: boolean;
+  isPayoutMsg?: boolean;
+  isRasoiMsg?: boolean;
   isError?: boolean;
   mobileNumber?: number;
   event?: Record<string, any>;
@@ -51,6 +53,8 @@ export class Message implements IMessage {
   hasAttachment: boolean;
   isPavti?: boolean;
   isRasoi?: boolean;
+  isPayoutMsg?: boolean;
+  isRasoiMsg?: boolean;
   isError?: boolean;
   mobileNumber?: number;
   event?: Record<string, any>;
@@ -80,6 +84,8 @@ export class Message implements IMessage {
     this.hasAttachment = input?.hasAttachment ?? false;
     this.isPavti = input?.isPavti ?? false;
     this.isRasoi = input?.isRasoi ?? false;
+    this.isPayoutMsg = input?.isPayoutMsg ?? false;
+    this.isRasoiMsg = input?.isRasoiMsg ?? false;
     this.isError = input?.isError ?? false;
     this.mobileNumber = input?.mobileNumber;
     this.event = input?.event;

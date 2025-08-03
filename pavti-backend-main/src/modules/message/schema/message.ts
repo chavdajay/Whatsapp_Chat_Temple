@@ -77,6 +77,14 @@ const message = new Schema<IMessage>(
       type: Boolean,
       default: false,
     },
+    isPayoutMsg: {
+      type: Boolean,
+      default: false,
+    },
+    isRasoiMsg: {
+      type: Boolean,
+      default: false,
+    },
     mobileNumber: {
       type: Number,
     },

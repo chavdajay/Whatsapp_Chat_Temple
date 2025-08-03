@@ -5,7 +5,6 @@ import { PDFService } from "../../services/pdf.service";
 import { pavtiPDF } from "../../helper/pdf/pavtiPDF";
 import { getUserByNumber, saveUser, User } from "../../modules/user";
 import { Message, saveMessage } from "../../modules/message";
-
 const router = Router();
 const whatsappService = WhatsAppService.getInstance();
 
@@ -46,7 +45,7 @@ router.post("/bill", async (req, res) => {
       return res.status(400).json({ message: "Request body cannot be empty" });
     }
 
-    const { RcptData: data } = req.body;
+    const data  = req.body;
     const fileName = uuid();
     const contactNo = data["ISD"].split("+")[1] + data["Mobile Number"];
     const chatId = `${contactNo}@c.us`;
