@@ -361,7 +361,9 @@ export const pavtiPDF = async ({
     });
   };
 
-  const companyKey = pavtiData["CompanyName"].split("-")[0] as keyof typeof imgPath;
+  const companyKey = pavtiData["CompanyName"]
+    .split("-")[0]
+    ?.trim() as keyof typeof imgPath;
   const imagePath = path.join(__dirname, "assets", imgPath[companyKey]);
   doc.image(imagePath, 0, 0, { width: 502, height: 80 });
 

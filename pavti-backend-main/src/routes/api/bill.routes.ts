@@ -45,7 +45,7 @@ router.post("/bill", async (req, res) => {
       return res.status(400).json({ message: "Request body cannot be empty" });
     }
 
-    const data  = req.body;
+    const data  = req.body.RcptData;
     const fileName = uuid();
     const contactNo = data["ISD"].split("+")[1] + data["Mobile Number"];
     const chatId = `${contactNo}@c.us`;
