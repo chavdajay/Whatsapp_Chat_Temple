@@ -86,6 +86,76 @@ export class WhatsAppService {
     }
   }
 
+  public async sendReceiptTemplate(
+    chatId: string, 
+    customerName: string, 
+    serviceType: string,
+    imageUrl?: string
+  ): Promise<string> {
+    try {
+      const formattedPhoneNumber = chatId.replace(/[^0-9]/g, "");
+      
+      const templatePayload = {
+        messaging_product: "whatsapp",
+        recipient_type: "individual",
+        to: formattedPhoneNumber,
+        type: "template",
+        template: {
+          name: "receipt_msg",
+          language: {
+            code: "en_us"
+          },
+          components: [
+            {
+              type: "header",
+              parameters: [
+                {
+                  type: "image",
+                  image: {
+                    link: imageUrl || "https://whatsapp.swaminarayanbhagwan.org/public/kundal_seva_trust.png"
+                  }
+                }
+              ]
+            },
+            {
+              type: "body",
+              parameters: [
+                {
+                  type: "text",
+                  text: customerName
+                },
+                {
+                  type: "text",
+                  text: serviceType
+                }
+              ]
+            }
+          ]
+        }
+      };
+
+      console.log("📦 Sending receipt template:", formattedPhoneNumber, " => ", templatePayload.template.name);
+
+      const response = await axios.post(
+        `${this.baseUrl}/${this.phoneNumberId}/messages`,
+        templatePayload,
+        {
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("📦 Message sent successfully");
+
+      return response.data.messages[0].id;
+    } catch (error) {
+      console.error("Error sending receipt template:", error);
+      throw error;
+    }
+  }
+
   // public async sendMessage(chatId: string, message: string): Promise<void> {
   //   try {
   //     return await axios.post(
@@ -136,7 +206,8 @@ export class WhatsAppService {
               template: message.template,
             };
 
-      console.log("📦 Sending payload:", JSON.stringify(payload, null, 2));
+            console.log("📦 Sending payload:", payload.to, " => ", payload?.template?.name );
+
 
       const response = await axios.post(
         `${this.baseUrl}/${this.phoneNumberId}/messages`,

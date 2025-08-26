@@ -52,7 +52,7 @@ const AppRouter = () => {
                     <div className="w-[18rm] flex-shrink-0 h-full overflow-y-auto border-r">
                       <Sidebar />
                     </div>
-                    <div className="w-[75%] h-full overflow-hidden">
+                    <div className="w-[100%] h-full overflow-hidden">
                       <WeeklyReportPage />
                     </div>
                   </div>
@@ -66,7 +66,7 @@ const AppRouter = () => {
                     <div className="w-[18rm] flex-shrink-0 h-full overflow-y-auto border-r">
                       <Sidebar />
                     </div>
-                    <div className="w-[75%] h-full overflow-hidden">
+                    <div className="w-[100%] h-full overflow-hidden">
                       <DailyReportDetail />
                     </div>
                   </div>

@@ -55,7 +55,7 @@ const ChatList = ({ setSelectedChatUser, selectedChatUser, setNewChatModal }) =>
     <div className="w-[25%] h-[100vh] border-r flex flex-col">
       {/* Header */}
       <div className="sticky top-0 bg-white z-10">
-        <div className="px-4 py-4 flex justify-between items-center border-b">
+        <div className="px-4 py-3 flex justify-between items-center border-b">
           <TitleHeader title="Chats" />
           <div className="flex gap-3 items-center">
             <button className="relative p-3 text-primary-100">

@@ -8,7 +8,6 @@ import {
 import socket from "../../utils/socket.js"
 import { RiCheckFill } from "react-icons/ri"
 import { IoCheckmarkDoneSharp } from "react-icons/io5"
-// import { chatService } from "../../services/chat.services.jsx"
 import chatService from "../../services/chat.services.jsx"
 
 const ChatMessages = ({ selectedChatUser }) => {
@@ -25,7 +24,6 @@ const ChatMessages = ({ selectedChatUser }) => {
       selectedChatUser?.id
 
     if (contactNo) {
-      // ✅ Step 1: Load old messages before enabling socket
       chatService
         .getChatHistory(contactNo)
         .then((data) => {
@@ -35,13 +33,11 @@ const ChatMessages = ({ selectedChatUser }) => {
             contactNo: contactNo,
           })
 
-          // ✅ Step 2: Mark all as seen (backend)
           dispatch({ type: MARK_MESSAGES_SEEN, payload: contactNo })
           chatService
             .markMessagesAsSeen(contactNo)
             .catch((err) => console.error("Failed to mark messages seen:", err))
 
-          // ✅ Step 3: Setup socket
           socket.connect()
           socket.off("new_message")
           socket.on("new_message", (payload) => {
@@ -81,11 +77,52 @@ const ChatMessages = ({ selectedChatUser }) => {
         const isMine = Boolean(msg.isSend)
         const ts = msg.created_at ?? msg.createdAt
         const timeText = ts
-          ? new Date(ts).toLocaleTimeString([], {
+          ? new Date(ts).toLocaleString([], {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
               hour: "2-digit",
               minute: "2-digit",
             })
           : ""
+
+        const renderReceipt = () => {
+          if (msg.isError) {
+            return (
+              <span className="absolute bottom-1 right-2 text-red-500 text-sm">
+                ❌
+              </span>
+            )
+          }
+          if (msg.isPending) {
+            return (
+              <span className="absolute bottom-1 right-2 text-gray-400 text-xs animate-pulse">
+                ⏳
+              </span>
+            )
+          }
+          if (msg.isSeen) {
+            return (
+              <IoCheckmarkDoneSharp className="absolute bottom-1 right-2 text-blue-500 text-sm" />
+            )
+          }
+          if (msg.isDelivered) {
+            return (
+              <IoCheckmarkDoneSharp className="absolute bottom-1 right-2 text-gray-500 text-sm" />
+            )
+          }
+          if (msg.isSend) {
+            return (
+              <RiCheckFill className="absolute bottom-1 right-2 text-gray-500 text-sm" />
+            )
+          }
+          // ✅ Fallback if no receipt status
+          return (
+            <span className="absolute bottom-1 right-2 text-gray-400 text-xs">
+              ✓?
+            </span>
+          )
+        }
 
         return (
           <div
@@ -100,23 +137,10 @@ const ChatMessages = ({ selectedChatUser }) => {
               }`}
             >
               {msg.message}
-              {msg.isError ? (
-                <span className="absolute bottom-1 right-2 text-red-500 text-sm">
-                  ❌
-                </span>
-              ) : msg.isPending ? (
-                <span className="absolute bottom-1 right-2 text-gray-400 text-xs animate-pulse">
-                  ⏳
-                </span>
-              ) : msg.isSeen ? (
-                <IoCheckmarkDoneSharp className="absolute bottom-1 right-2 text-blue-500 text-sm" />
-              ) : msg.isDelivered ? (
-                <IoCheckmarkDoneSharp className="absolute bottom-1 right-2 text-grey_font-500 text-sm" />
-              ) : msg.isSend ? (
-                <RiCheckFill className="absolute bottom-1 right-2 text-gray-500 text-sm" />
-              ) : null}
+              {renderReceipt()}
             </div>
 
+            {/* ✅ Show Date + Time */}
             <div className="text-gray-400 text-xs mt-1">{timeText}</div>
           </div>
         )
@@ -125,6 +149,5 @@ const ChatMessages = ({ selectedChatUser }) => {
     </div>
   )
 }
-//old code
 
 export default ChatMessages

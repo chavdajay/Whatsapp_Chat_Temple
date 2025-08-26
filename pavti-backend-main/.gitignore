@@ -2,13 +2,13 @@ logs/
 node_modules/
 developing_data/
 dist/
-public/
 env/
 credentials/
 exports/
 uploads/
 walletStorage/
 build/
+live-build-17-08-2025/
 
 
 .DS_Store

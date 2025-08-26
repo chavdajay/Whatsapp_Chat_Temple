@@ -31,7 +31,8 @@ export default class App {
     this.instance.use(cookieParser(process.env.COOKIE_SECRET));
     this.instance.use(contextMiddleware);
     this.instance.use(express.json({ limit: "50mb" }));
-    this.instance.use(express.static(process.cwd() + "/public"));
+    // this.instance.use(express.static(process.cwd() + "/public"));
+    this.instance.use("/assets", express.static(process.cwd() + "/assets"));
   }
 
   private static initializeControllers() {

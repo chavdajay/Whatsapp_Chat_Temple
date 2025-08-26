@@ -5,7 +5,6 @@ import { PDFService } from "../../services/pdf.service";
 import { pavtiPDF } from "../../helper/pdf/pavtiPDF";
 import { getUserByNumber, saveUser, User } from "../../modules/user";
 import { Message, saveMessage } from "../../modules/message";
-
 const router = Router();
 const whatsappService = WhatsAppService.getInstance();
 
@@ -46,8 +45,9 @@ router.post("/bill", async (req, res) => {
       return res.status(400).json({ message: "Request body cannot be empty" });
     }
 
-    const { RcptData: data } = req.body;
-    const fileName = uuid();
+    const data = req.body.RcptData;
+
+    const fileName = process.env.ASSETS_PATH + uuid();
     const contactNo = data["ISD"].split("+")[1] + data["Mobile Number"];
     const chatId = `${contactNo}@c.us`;
 
@@ -78,7 +78,19 @@ router.post("/bill", async (req, res) => {
     let messageId = null;
 
     try {
-      messageId = await whatsappService.sendMedia(chatId, imagePath);
+      console.log(
+        "Sending pavti via WhatsApp to:",
+        process.env.BACKEND_URL +
+          imagePath.replace(process.env.ASSETS_PATH || "", "/assets/")
+      );
+
+      messageId = await whatsappService.sendReceiptTemplate(
+        chatId,
+        data["Donor Name"] || " ",
+        data["SubHead"] || " ",
+        process.env.BACKEND_URL +
+          imagePath.replace(process.env.ASSETS_PATH || "", "/assets/")
+      );
     } catch (sendErr) {
       console.error("Failed to send pavti via WhatsApp:", sendErr);
       isError = true;
@@ -103,7 +115,10 @@ router.post("/bill", async (req, res) => {
       })
     );
 
-    PDFService.cleanupFiles(imagePath, pdfPath);
+    // 🗑️ Cleanup files after 10 minutes
+    setTimeout(() => {
+      PDFService.cleanupFiles(imagePath, pdfPath);
+    }, 10 * 60 * 1000); // 10 minutes in milliseconds
 
     if (isError) {
       return res

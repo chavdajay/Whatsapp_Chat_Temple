@@ -31,54 +31,22 @@ export const msgData = {
   DATA: {
     MSGRPT: [
       {
-        "Sl No": 1,
-        Rasoidt: "31-Mar-26",
         Name: "ઘનશ્યામભાઈ પ્રવિણચંદ્ર દવે",
-        Nimit: "Rajipo",
-        Status: "Yes",
+        payoutId: 1,
+        RasoiPlace: "Rajipo",
         ISD: "+91",
-        "Mobile No": "9898391207",
-        Message: {
-          type: "template",
-          template: {
-            name: "rasoi_welcome", // ✅ use your exact approved template name
-            language: { code: "gu_IN" },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  { type: "text", text: "ઘનશ્યામભાઈ પ્રવિણચંદ્ર દવે" },
-                  { type: "text", text: "31-Mar-26" },
-                ],
-              },
-            ],
-          },
-        },
+        "Mobile No": "8460070594",
+        SendRasoi: "true",
+        SendPayout: "false",
       },
       {
-        "Sl No": 2,
-        Rasoidt: "31-Mar-26",
         Name: "જયભાઈ ઘનશ્યામભાઈ દવે",
-        Nimit: "Education",
-        Status: "Yes",
+        payoutId: 2,
+        RasoiPlace: "Education",
         ISD: "+91",
-        "Mobile No": "6352352558",
-        Message: {
-          type: "template",
-          template: {
-            name: "rasoi_welcome",
-            language: { code: "gu_IN" },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  { type: "text", text: "જયભાઈ ઘનશ્યામભાઈ દવે" },
-                  { type: "text", text: "31-Mar-26" },
-                ],
-              },
-            ],
-          },
-        },
+        "Mobile No": "8140457239",
+        SendPayout: "true",
+        SendRasoi: "false",
       },
     ],
   },
