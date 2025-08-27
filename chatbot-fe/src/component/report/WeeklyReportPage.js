@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
-import axios from "axios"
-import { BASE_URL } from "../../config/Api.jsx"
+import axiosInstance from "../../services/axios.config.jsx"
 import { useNavigate } from "react-router-dom"
 
 const WeeklyReportPage = () => {
@@ -11,7 +10,7 @@ const WeeklyReportPage = () => {
 
   const fetchReport = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/report/weekly", {
+      const res = await axiosInstance.get("/report/weekly", {
         params: {
           startDate,
           endDate,

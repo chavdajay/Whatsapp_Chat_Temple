@@ -11,7 +11,7 @@ import {
 import { useReportMaster } from "../../redux/report/reportReducer.jsx"
 import { MdDone, MdDoneAll, MdClose } from "react-icons/md"
 import { GoDotFill } from "react-icons/go"
-import { CircleProgress } from "react-gradient-progress"
+import CircleProgress from "../global/CircleProgress.jsx"
 import moment from "moment"
 import { FaFilePdf } from "react-icons/fa6"
 import { ImFileExcel } from "react-icons/im"
@@ -22,9 +22,9 @@ const SummaryReport = ({ summaryData }) => {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-8">
-        <div className="bg-white-100 p-3 flex justify-between items-center rounded-xl shadow-sm">
+        <div className="bg-white-100 p-2 flex justify-between items-center rounded-xl shadow-sm">
           <div className="flex gap-6 items-center">
-            <div className="bg-light-200 p-3 rounded-md">
+            <div className="bg-light-200 p-2 rounded-md">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
@@ -65,9 +65,9 @@ const SummaryReport = ({ summaryData }) => {
             width="70"
           />
         </div>
-        <div className="bg-white-100 p-3 flex justify-between items-center rounded-xl shadow-sm">
+        <div className="bg-white-100 p-2 flex justify-between items-center rounded-xl shadow-sm">
           <div className="flex gap-6 items-center">
-            <div className="bg-light-300 p-3 rounded-md">
+            <div className="bg-light-300 p-2 rounded-md">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
@@ -102,7 +102,7 @@ const SummaryReport = ({ summaryData }) => {
             width="70"
           />
         </div>
-        <div className="bg-white-100 p-3 flex justify-between items-center rounded-xl shadow-sm">
+        <div className="bg-white-100 p-2 flex justify-between items-center rounded-xl shadow-sm">
           <div className="flex gap-6 items-center">
             <div className="bg-black-400 p-2 rounded-md">
               <svg
@@ -138,7 +138,7 @@ const SummaryReport = ({ summaryData }) => {
             width="70"
           />
         </div>
-        <div className="bg-white-100 p-3 flex justify-between items-center rounded-xl shadow-sm">
+        <div className="bg-white-100 p-2 flex justify-between items-center rounded-xl shadow-sm">
           <div className="flex gap-6 items-center">
             <div className="bg-light-400 p-2 rounded-md">
               <svg

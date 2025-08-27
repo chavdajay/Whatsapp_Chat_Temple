@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useParams, Link, useSearchParams } from "react-router-dom"
 import { handleSuccess, handleError } from "../../utils/toastUtils"
-import axios from "axios"
-import { BASE_URL } from "../../config/Api.jsx"
+import axiosInstance from "../../services/axios.config.jsx"
 import { IoArrowBack } from "react-icons/io5"
 
 // ✅ No hover styles now
@@ -20,8 +19,8 @@ const DailyReportDetail = () => {
   const [type, setType] = useState(searchParams.get("type") || "all")
 
   useEffect(() => {
-    axios
-      .get(BASE_URL + `/report/weekly/${date}`)
+    axiosInstance
+      .get(`/report/weekly/${date}`)
       .then((res) => {
         if (res.data.success) {
           const all = res.data.data
@@ -39,7 +38,7 @@ const DailyReportDetail = () => {
 
   const handleResend = async (msg) => {
     try {
-      const res = await axios.post(BASE_URL + "/messages/send/number", {
+      const res = await axiosInstance.post("/messages/send/number", {
         contactNo: msg.mobileNumber,
         message: msg.message,
         originalMessageId: msg._id,
@@ -63,7 +62,7 @@ const DailyReportDetail = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <Link
           to="/weekly-report"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded-lg transition"
+          className="inline-flex items-center gap-1 text-blue-600 hover:underline text-sm font-medium"
         >
           <IoArrowBack size={18} />
           Back
@@ -91,73 +90,79 @@ const DailyReportDetail = () => {
       {data.length === 0 ? (
         <p className="text-gray-500">No messages found for selected type.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {data.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`rounded-lg p-4 border shadow-md transition ${
-                msg.isError ? "bg-red-50 border-red-300" : "bg-white border-gray-200"
-              }`}
-            >
-              <p className="text-sm text-gray-700">
-                <strong>👤 Name:</strong> {msg.senderName || "Unknown"}
-              </p>
-              <p className="text-sm text-gray-700">
-                <strong>📱 Number:</strong> {msg.mobileNumber}
-              </p>
-              <p className="text-sm text-gray-700 break-words">
-                <strong>💬 Message:</strong> {msg.message}
-              </p>
-
-              {/* Rasoi Status */}
-              {msg.isRasoi && (
-                <p className="mt-2 text-sm font-medium text-amber-600">
-                  🍛 Rasoi:{" "}
-                  {msg.isError ? (
-                    <>
-                      ❌
-                      <button
-                        className="ml-2 px-3 py-1 text-xs bg-red-100 text-red-800 rounded"
-                        onClick={() => handleResend(msg)}
-                      >
-                        Resend
-                      </button>
-                    </>
-                  ) : (
-                    "✅"
-                  )}
+        <div className="h-[70vh] overflow-y-auto pr-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {data.map((msg, idx) => (
+              <div
+                key={idx}
+                className={`rounded-lg p-4 border shadow-md transition ${
+                  msg.isError
+                    ? "bg-red-50 border-red-300"
+                    : "bg-white border-gray-200"
+                }`}
+              >
+                <p className="text-sm text-gray-700">
+                  <strong>👤 Name:</strong> {msg.senderName || "Unknown"}
                 </p>
-              )}
-
-              {/* Pavti Status */}
-              {msg.isPavti && (
-                <p className="text-sm font-medium text-emerald-600">
-                  🧾 Pavti:{" "}
-                  {msg.isError ? (
-                    <>
-                      ❌
-                      <button
-                        className="ml-2 px-3 py-1 text-xs bg-red-100 text-red-800 rounded"
-                        onClick={() => handleResend(msg)}
-                      >
-                        Resend
-                      </button>
-                    </>
-                  ) : (
-                    "✅"
-                  )}
+                <p className="text-sm text-gray-700">
+                  <strong>📱 Number:</strong> {msg.mobileNumber}
                 </p>
-              )}
-
-              {/* Error Note */}
-              {msg.isError && (
-                <p className="text-xs mt-3 text-red-600 italic">
-                  ❗ Message failed. You can try resending.
+                <p className="text-sm text-gray-700 break-words">
+                  <strong>💬 Message:</strong> {msg.message}
                 </p>
-              )}
-            </div>
-          ))}
+
+                {/* Rasoi Status */}
+                {msg.isRasoi && (
+                  <p className="mt-2 text-sm font-medium text-amber-600">
+                    🍛 Rasoi:{" "}
+                    {msg.isError ? (
+                      <>
+                        ❌
+                        <button
+                          className="ml-2 px-3 py-1 text-xs bg-red-100 text-red-800 rounded"
+                          onClick={() => handleResend(msg)}
+                        >
+                          Resend
+                        </button>
+                      </>
+                    ) : (
+                      "✅"
+                    )}
+                  </p>
+                )}
+
+                {/* Pavti Status */}
+                {msg.isPavti && (
+                  <p className="text-sm font-medium text-emerald-600">
+                    🧾 Pavti:{" "}
+                    {msg.isError ? (
+                      <>
+                        ❌
+                        <button
+                          className="ml-2 px-3 py-1 text-xs bg-red-100 text-red-800 rounded"
+                          onClick={() => handleResend(msg)}
+                        >
+                          Resend
+                        </button>
+                      </>
+                    ) : (
+                      "✅"
+                    )}
+                  </p>
+                )}
+
+                {/* Error Note */}
+                {msg.isError && (
+                  <p className="text-xs mt-3 text-red-600 italic">
+                    ❗ Message failed. You can try resending.
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
+
+        //new data
       )}
     </div>
   )

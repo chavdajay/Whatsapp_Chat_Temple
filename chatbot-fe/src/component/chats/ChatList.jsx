@@ -11,6 +11,7 @@ const ChatList = ({ setSelectedChatUser, selectedChatUser, setNewChatModal }) =>
   const dispatch = useDispatch()
   const { chatList } = useChatMaster()
   const [searchTerm, setSearchTerm] = useState("")
+  const [showOnlyUnread, setShowOnlyUnread] = useState(false)
 
   const handleChatClick = (chat) => {
     dispatch({
@@ -21,15 +22,28 @@ const ChatList = ({ setSelectedChatUser, selectedChatUser, setNewChatModal }) =>
     setSelectedChatUser(chat)
   }
 
-  // Filter chat list based on search input
+  const handleNotificationClick = () => {
+    setShowOnlyUnread(!showOnlyUnread)
+  }
+
+  const unReadMessages = (chatHistory = []) =>
+    chatHistory.filter((msg) => msg.isReceived && !msg.isSeen).length
+
+  // Filter chat list based on search input and unread filter
   const filteredChatList = chatList?.filter((chat) => {
     const name = chat.fullName?.toLowerCase() || ""
     const contact = chat.contactNo?.toString().toLowerCase() || ""
 
-    return (
+    // Search filter
+    const matchesSearch =
       name.includes(searchTerm.toLowerCase()) ||
       contact.includes(searchTerm.toLowerCase())
-    )
+
+    // Unread filter
+    const hasUnreadMessages = unReadMessages(chat.chatHistory) > 0
+    const matchesUnreadFilter = showOnlyUnread ? hasUnreadMessages : true
+
+    return matchesSearch && matchesUnreadFilter
   })
 
   // Sort chat list based on latest_message.created_at
@@ -38,9 +52,6 @@ const ChatList = ({ setSelectedChatUser, selectedChatUser, setNewChatModal }) =>
     const timeB = new Date(b?.latest_message?.created_at || 0)
     return timeB - timeA
   })
-
-  const unReadMessages = (chatHistory = []) =>
-    chatHistory.filter((msg) => msg.isReceived && !msg.isSeen).length
 
   const getTime = (createdAt) => {
     if (!createdAt) return ""
@@ -55,12 +66,19 @@ const ChatList = ({ setSelectedChatUser, selectedChatUser, setNewChatModal }) =>
     <div className="w-[25%] h-[100vh] border-r flex flex-col">
       {/* Header */}
       <div className="sticky top-0 bg-white z-10">
-        <div className="px-4 py-4 flex justify-between items-center border-b">
+        <div className="px-4 py-3 flex justify-between items-center border-b">
           <TitleHeader title="Chats" />
           <div className="flex gap-3 items-center">
-            <button className="relative p-3 text-primary-100">
+            <button
+              onClick={handleNotificationClick}
+              className={`relative p-2 transition-colors ${
+                showOnlyUnread ? "text-blue-600 bg-blue-50" : "text-primary-100"
+              }`}
+            >
               <PiChatsLight size={30} />
-              <span className="sr-only">Notifications</span>
+              <span className="sr-only">
+                {showOnlyUnread ? "Show all chats" : "Show unread chats"}
+              </span>
 
               {Array.isArray(chatList) &&
                 chatList.some((chat) => unReadMessages(chat.chatHistory) > 0) && (
@@ -105,7 +123,7 @@ const ChatList = ({ setSelectedChatUser, selectedChatUser, setNewChatModal }) =>
             <button
               key={idx}
               onClick={() => handleChatClick(chat)}
-              className={`flex justify-between p-3 border-b hover:bg-bg_color-200 cursor-pointer w-full ${
+              className={`flex justify-between p-2 border-b hover:bg-bg_color-200 cursor-pointer w-full ${
                 selectedChatUser?.contactNo === chat.contactNo
                   ? "bg-bg_color-200"
                   : "bg-transparent"
@@ -121,17 +139,19 @@ const ChatList = ({ setSelectedChatUser, selectedChatUser, setNewChatModal }) =>
                   alt="Profile"
                   className="w-[3rem] h-[3rem] rounded-full"
                 />
-                <div className="flex flex-col gap-1 items-start">
-                  <div>
-                    <span className="font-bold">{chat.contactNo}</span>{" "}
+                <div className="flex flex-col items-start">
+                  <div className="flex items-center gap-2 max-w-[15rem]">
+                    <span className="text-xm font-bold flex-shrink-0">
+                      {chat.contactNo}
+                    </span>
                     <span
-                      className="font-normal text-sm text-gray-500 max-w-[6rem] truncate inline-block align-bottom"
+                      className="text-xs text-gray-700 font-light truncate"
                       title={chat.fullName}
                     >
-                      ({chat.fullName})
+                      {chat.fullName}
                     </span>
                   </div>
-                  <div className="font-light text-grey_font-500 text-sm truncate w-[10rem] text-left">
+                  <div className="font-light text-black text-sm truncate w-[10rem] text-left mt-1">
                     {chat?.latest_message?.message || "No message"}
                   </div>
                 </div>
@@ -139,7 +159,7 @@ const ChatList = ({ setSelectedChatUser, selectedChatUser, setNewChatModal }) =>
 
               {/* Right Side */}
               <div className="flex flex-col justify-center items-end gap-1">
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-black">
                   {getTime(chat?.latest_message?.created_at)}
                 </div>
                 {unReadMessages(chat.chatHistory) > 0 && (

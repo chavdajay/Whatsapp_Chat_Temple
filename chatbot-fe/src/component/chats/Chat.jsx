@@ -133,7 +133,7 @@ const Chat = ({ selectedChatUser, newChatModal, setNewChatModal }) => {
     <>
       {selectedChatUser ? (
         <div className="w-[75%] h-[100vh] flex flex-col">
-          <div className="sticky top-0 flex border-b h-[4.5rem] p-3 gap-2 items-center z-10 bg-white">
+          <div className="sticky flex border-b px-4 py-3 gap-2 items-center z-10 bg-white">
             <img
               src={
                 selectedChatUser?.img ||
@@ -146,6 +146,10 @@ const Chat = ({ selectedChatUser, newChatModal, setNewChatModal }) => {
               {selectedChatUser?.contactNo ||
                 selectedChatUser?.mobile_number ||
                 "No name"}
+            </div>
+            <div className="text-gray-400">-</div>
+            <div className="font-bold">
+              {selectedChatUser?.fullName || selectedChatUser?.name}
             </div>
           </div>
           <ChatMessages selectedChatUser={selectedChatUser} />

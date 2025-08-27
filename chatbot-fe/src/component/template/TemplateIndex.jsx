@@ -52,7 +52,7 @@ const TemplateIndex = () => {
           </div>
 
           {/* Right section: Recent Templates */}
-          <div className="overflow-auto bg-white-100 flex flex-col border gap-5 2xl:p-3 xl:p-2 lg:p-2 p-2 border-gray-200 rounded-lg 2xl:h-[87vh] xl:h-[85vh] lg:h-[82vh]">
+          <div className="overflow-auto bg-white-100 flex flex-col border gap-5 2xl:p-2 xl:p-2 lg:p-2 p-2 border-gray-200 rounded-lg 2xl:h-[87vh] xl:h-[85vh] lg:h-[82vh]">
             <Suspense fallback={<Loader />}>
               <RecentTemplates />
             </Suspense>

@@ -42,6 +42,9 @@ import { BASE_URL } from "../config/Api.jsx"
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
+  headers: {
+    "ngrok-skip-browser-warning": "true",
+  },
 })
 
 // No interceptors needed if token is unused
