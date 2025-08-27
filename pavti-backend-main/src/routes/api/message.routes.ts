@@ -99,7 +99,6 @@ router.post("/msg", async (req, res) => {
     if (messages && !Array.isArray(messages)) {
       messages = [messages];
     }
-
     if (!Array.isArray(messages)) {
       return res.status(400).json({ error: "Invalid message data" });
     }

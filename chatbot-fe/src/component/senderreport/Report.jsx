@@ -101,7 +101,7 @@ export const ReportCards = ({ value }) => {
       </div>
       <div>
         <hr />
-        <div className="rounded-md p-3 flex justify-around items-center text-icon_color-100 text-xl font-semibold">
+        <div className="rounded-md p-2 flex justify-around items-center text-icon_color-100 text-xl font-semibold">
           <div className="flex items-center gap-1.5">
             <AiOutlineEye />
             {value?.seen}

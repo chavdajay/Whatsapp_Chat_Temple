@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useParams, useSearchParams, Link } from "react-router-dom"
 import { handleSuccess, handleError } from "../../utils/toastUtils"
-import axios from "axios"
-import { BASE_URL } from "../../config/Api.jsx"
+import axiosInstance from "../../services/axios.config.jsx"
 import { IoArrowBack } from "react-icons/io5"
 
 const mainCities = ["Vadodara", "Kundal", "Trust", "Other"]
@@ -32,13 +31,27 @@ const DailyReportDetail = () => {
   }
 
   useEffect(() => {
-    fetchReport()
-  }, [date])
+    axiosInstance
+      .get(`/report/weekly/${date}`)
+      .then((res) => {
+        if (res.data.success) {
+          const all = res.data.data
+          let filtered = all
+
+          if (type === "rasoi") filtered = all.filter((msg) => msg.isRasoi)
+          else if (type === "pavti") filtered = all.filter((msg) => msg.isPavti)
+          else filtered = all.filter((msg) => msg.isRasoi || msg.isPavti)
+
+          setData(filtered)
+        }
+      })
+      .catch((err) => console.error("Daily report fetch failed:", err))
+  }, [date, type])
 
   const handleResend = async (msg) => {
     setResendingId(msg._id)
     try {
-      const res = await axios.post(`${BASE_URL}/messages/send/number`, {
+      const res = await axiosInstance.post("/messages/send/number", {
         contactNo: msg.mobileNumber,
         message: msg.message,
         originalMessageId: msg._id,
@@ -144,10 +157,14 @@ const DailyReportDetail = () => {
       ) : (
         <div className="h-[70vh] overflow-y-auto pr-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {filteredData.map((msg, idx) => (
+            {data.map((msg, idx) => (
               <div
                 key={idx}
-                className={`rounded-lg p-4 border shadow-md transition ${msg.isError ? "bg-red-50 border-red-300" : "bg-white border-gray-200"}`}
+                className={`rounded-lg p-4 border shadow-md transition ${
+                  msg.isError
+                    ? "bg-red-50 border-red-300"
+                    : "bg-white border-gray-200"
+                }`}
               >
                 <p className="text-sm text-gray-700">
                   <strong>👤 Name:</strong> {msg.senderName || "Unknown"}
@@ -174,6 +191,8 @@ const DailyReportDetail = () => {
             ))}
           </div>
         </div>
+
+        //new data
       )}
     </div>
   )

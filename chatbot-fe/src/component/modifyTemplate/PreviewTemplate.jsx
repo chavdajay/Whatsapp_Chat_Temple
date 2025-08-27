@@ -74,7 +74,7 @@ const PreviewTemplate = ({
         Templates Preview
       </div>
       <div
-        className="p-3 h-[93%] relative"
+        className="p-2 h-[93%] relative"
         style={{
           backgroundImage: `url(${ChatBg})`,
           backgroundSize: "cover",

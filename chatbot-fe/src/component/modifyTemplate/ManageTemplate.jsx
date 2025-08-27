@@ -322,7 +322,7 @@ const ManageTemplate = ({
               id="dropdownDefaultRadio"
               className="absolute bottom-full left-0 mb-2 z-20 w-48 bg-white-100 divide-y divide-gray-100 rounded-lg shadow-lg"
             >
-              <ul className="p-3 space-y-3 text-sm text-gray-700">
+              <ul className="p-2 space-y-3 text-sm text-gray-700">
                 {ButtonType.map((btn) => (
                   <div key={btn.type}>
                     <div className="font-bold">

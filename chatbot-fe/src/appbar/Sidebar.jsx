@@ -99,7 +99,7 @@ const Sidebar = () => {
 
       <div className="pb-10 flex flex-col items-center gap-5 text-grey_font-100">
         <button
-          className="border p-3 rounded-lg text-primary-100 shadow-sm"
+          className="border p-2 rounded-lg text-primary-100 shadow-sm"
           onClick={handleLogout}
         >
           <LuLogOut size={20} />

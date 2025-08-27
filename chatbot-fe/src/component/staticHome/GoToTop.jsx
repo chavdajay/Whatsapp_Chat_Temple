@@ -38,7 +38,7 @@ export default function GoToTop() {
   return (
     showButton && (
       <button
-        className="fixed bottom-4 right-4 bg-orange-500 text-white-100 p-3 rounded-full shadow-lg "
+        className="fixed bottom-4 right-4 bg-orange-500 text-white-100 p-2 rounded-full shadow-lg "
         onClick={handleGoToTopClick}
       >
         <FaArrowUpLong className="go-to-top" />
